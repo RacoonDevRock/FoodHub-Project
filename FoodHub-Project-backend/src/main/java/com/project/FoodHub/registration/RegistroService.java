@@ -8,12 +8,12 @@ import com.project.FoodHub.exception.ColegiadoNoValidoException;
 import com.project.FoodHub.exception.CorreoConfirmadoException;
 import com.project.FoodHub.exception.CuentaNoCreadaException;
 import com.project.FoodHub.exception.TokenNoEncontradoException;
-import com.project.FoodHub.exception.TokenExpiradoException;
 import com.project.FoodHub.registration.token.TokenConfirmacion;
 import com.project.FoodHub.registration.token.TokenConfirmacionService;
 import com.project.FoodHub.service.ColegiadoService;
 import com.project.FoodHub.service.CreadorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +28,9 @@ public class RegistroService {
     private final CreadorService creadorService;
     private final EmailSender emailSender;
     private final TokenConfirmacionService tokenConfirmacionService;
+
+    @Value("${baseUrl}")
+    private String baseUrl;
 
 
     public ConfirmacionResponse registrar(CreadorRequest request) {
@@ -51,7 +54,7 @@ public class RegistroService {
         Optional<String> tokenOptional = creadorService.crearCuenta(creador);
         String token = tokenOptional.orElseThrow(() -> new CuentaNoCreadaException("No se pudo crear la cuenta correctamente."));
 
-        String link = "https://foodhub-backend-4thr.onrender.com/auth/confirm?token=" + token;
+        String link = baseUrl + "/auth/confirm?token=" + token;
         emailSender.enviarConfirmacionCuenta(request.getCorreoElectronico(), request.getNombre(), link);
 
         return new ConfirmacionResponse("Creación de cuenta exitosa", "success");

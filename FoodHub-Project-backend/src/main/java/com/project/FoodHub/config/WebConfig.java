@@ -15,8 +15,8 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebConfig implements Filter {
 
-    @Value("${baseUrl}")
-    private String baseUrl;
+    @Value("${frontUrl}")
+    private String frontUrl;
 
 
     @Override
@@ -32,7 +32,7 @@ public class WebConfig implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        response.setHeader("Access-Control-Allow-Origin", baseUrl);
+        response.setHeader("Access-Control-Allow-Origin", frontUrl);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, HEAD, PATCH");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, credential, X-XSRF-TOKEN");
 

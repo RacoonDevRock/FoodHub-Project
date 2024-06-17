@@ -9,7 +9,7 @@ import {RecetaDTO} from "../models/RecetaDTO";
   providedIn: 'root'
 })
 export class RecetaService {
-  url:string = environments.baseUrl;
+  public url = environments.baseUrl;
 
   constructor(private http: HttpClient) { }
 
