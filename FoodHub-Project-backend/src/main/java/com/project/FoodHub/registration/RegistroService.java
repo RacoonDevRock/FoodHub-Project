@@ -10,8 +10,8 @@ import com.project.FoodHub.exception.CuentaNoCreadaException;
 import com.project.FoodHub.exception.TokenNoEncontradoException;
 import com.project.FoodHub.registration.token.TokenConfirmacion;
 import com.project.FoodHub.registration.token.TokenConfirmacionService;
-import com.project.FoodHub.service.ColegiadoService;
-import com.project.FoodHub.service.CreadorService;
+import com.project.FoodHub.service.IColegiadoService;
+import com.project.FoodHub.service.ICreadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegistroService {
 
-    private final ColegiadoService colegiadoService;
-    private final CreadorService creadorService;
+    private final IColegiadoService colegiadoService;
+    private final ICreadorService creadorService;
     private final EmailSender emailSender;
     private final TokenConfirmacionService tokenConfirmacionService;
 

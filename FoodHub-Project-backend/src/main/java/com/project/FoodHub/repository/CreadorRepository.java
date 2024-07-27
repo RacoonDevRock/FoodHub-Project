@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CreadorRepository extends JpaRepository<Creador, Long> {
 
-    Optional<Creador> findByIdCreador(Long idCreador);
-
     @Modifying
     @Query("UPDATE Creador t SET t.enabled = true WHERE t.correoElectronico = :correo")
     int enableUser(String correo);

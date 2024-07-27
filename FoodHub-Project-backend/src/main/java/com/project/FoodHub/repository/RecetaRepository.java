@@ -13,7 +13,5 @@ import java.util.Optional;
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
     Optional<List<Receta>> findByCategoria(Categoria categoria);
 
-    Optional<Receta> findById(Long idReceta);
-
     int countByCreador(Creador creador);
 }

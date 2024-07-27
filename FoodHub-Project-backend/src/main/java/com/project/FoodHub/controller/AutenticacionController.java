@@ -5,7 +5,7 @@ import com.project.FoodHub.dto.AuthResponse;
 import com.project.FoodHub.dto.ConfirmacionResponse;
 import com.project.FoodHub.dto.CreadorRequest;
 import com.project.FoodHub.registration.RegistroService;
-import com.project.FoodHub.service.CreadorService;
+import com.project.FoodHub.service.ICreadorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
-@CrossOrigin("*")
 public class AutenticacionController {
 
     private final RegistroService registroService;
-    private final CreadorService creadorService;
+    private final ICreadorService creadorService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ConfirmacionResponse> register(@Valid @RequestBody CreadorRequest request/*, HttpServletRequest httpServletRequest*/){
-        /*httpServletRequest.getHeader(HttpHeaders.ORIGIN);*/
+    public ResponseEntity<ConfirmacionResponse> register(@Valid @RequestBody CreadorRequest request){
         return ResponseEntity.ok(registroService.registrar(request));
     }
 
-    @GetMapping(path = "confirm")
+    @GetMapping("/confirm")
     public ResponseEntity<ConfirmacionResponse> confirm(@RequestParam("token") String token) {
         return ResponseEntity.ok(registroService.confirmarToken(token));
     }

@@ -5,7 +5,7 @@ import com.project.FoodHub.dto.RecetasCategoriaResponse;
 import com.project.FoodHub.dto.RecetaRequest;
 import com.project.FoodHub.entity.Categoria;
 import com.project.FoodHub.entity.Receta;
-import com.project.FoodHub.service.RecetaService;
+import com.project.FoodHub.service.IRecetaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/explorar")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class RecetaController {
 
-    private final RecetaService recetaService;
+    private final IRecetaService recetaService;
 
     @PostMapping("/crear")
     public ResponseEntity<ConfirmacionResponse> crearReceta(@Valid @RequestBody RecetaRequest recetaRequest) {

@@ -1,9 +1,8 @@
-package com.project.FoodHub.service;
+package com.project.FoodHub.service.impl;
 
 import com.project.FoodHub.config.Jwt.JwtService;
 import com.project.FoodHub.dto.AuthRequest;
 import com.project.FoodHub.dto.AuthResponse;
-import com.project.FoodHub.dto.ConfirmacionResponse;
 import com.project.FoodHub.dto.CreadorDTO;
 import com.project.FoodHub.entity.Creador;
 import com.project.FoodHub.entity.Rol;
@@ -13,6 +12,7 @@ import com.project.FoodHub.registration.token.TokenConfirmacion;
 import com.project.FoodHub.registration.token.TokenConfirmacionService;
 import com.project.FoodHub.repository.CreadorRepository;
 import com.project.FoodHub.repository.RecetaRepository;
+import com.project.FoodHub.service.ICreadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CreadorService {
+public class CreadorServiceImpl implements ICreadorService {
 
     private final CreadorRepository creadorRepository;
     private final PasswordEncoder passwordEncoder;
@@ -41,10 +40,12 @@ public class CreadorService {
     private final CreadorMapper creadorMapper;
 
 
+    @Override
     public List<Creador> mostrarCreadores() {
         return creadorRepository.findAll();
     }
 
+    @Override
     public Optional<String> crearCuenta(Creador creador) {
         if (creadorRepository.findCreadorByCorreoElectronico(creador.getCorreoElectronico()).isPresent()) {
             throw new CorreoExistenteException("Correo ingresado ya existe");
@@ -67,6 +68,8 @@ public class CreadorService {
 
         return Optional.of(token);
     }
+
+    @Override
     public AuthResponse iniciarSesion(AuthRequest authRequest) {
         String identificador = authRequest.getIdentificador();
         String contrasenia = authRequest.getContrasenia();
@@ -100,24 +103,27 @@ public class CreadorService {
         }
     }
 
-    public Integer obtenerCantidadDeRecetasCreadas(){
+    @Override
+    public Integer obtenerCantidadDeRecetasCreadas() {
         Long idCreador = obtenerIdCreadorAutenticado();
 
-        Creador creador = creadorRepository.findByIdCreador(idCreador)
+        Creador creador = creadorRepository.findById(idCreador)
                 .orElseThrow(() -> new CreadorNoEncontradoException("Creador no encontrado con ID: " + idCreador));
 
         return recetaRepository.countByCreador(creador);
     }
 
+    @Override
     public CreadorDTO verPerfil() {
         Long idCreador = obtenerIdCreadorAutenticado();
 
-        Creador creador = creadorRepository.findByIdCreador(idCreador)
+        Creador creador = creadorRepository.findById(idCreador)
                 .orElseThrow(() -> new CreadorNoEncontradoException("Creador no encontrado con ID: " + idCreador));
 
         return creadorMapper.mapToDTO(creador);
     }
 
+    @Override
     public int enableUser(String email) {
         return creadorRepository.enableUser(email);
     }
