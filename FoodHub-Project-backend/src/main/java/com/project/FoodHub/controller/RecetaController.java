@@ -3,7 +3,7 @@ package com.project.FoodHub.controller;
 import com.project.FoodHub.dto.ConfirmacionResponse;
 import com.project.FoodHub.dto.RecetasCategoriaResponse;
 import com.project.FoodHub.dto.RecetaRequest;
-import com.project.FoodHub.entity.Categoria;
+import com.project.FoodHub.enumeration.Categoria;
 import com.project.FoodHub.entity.Receta;
 import com.project.FoodHub.service.IRecetaService;
 import jakarta.validation.Valid;

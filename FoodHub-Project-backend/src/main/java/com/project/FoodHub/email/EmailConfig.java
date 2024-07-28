@@ -1,4 +1,4 @@
-package com.project.FoodHub.config;
+package com.project.FoodHub.email;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +9,16 @@ import java.util.Properties;
 
 @Configuration
 public class EmailConfig {
+
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+        // Set up Gmail config
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
+        // Set up email config (using user-email)
         mailSender.setUsername("foodhub.recetas@gmail.com");
         mailSender.setPassword("xewfkjyyqxpmxbye");
 
@@ -26,4 +30,5 @@ public class EmailConfig {
 
         return mailSender;
     }
+
 }

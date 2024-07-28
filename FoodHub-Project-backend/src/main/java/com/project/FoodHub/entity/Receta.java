@@ -1,6 +1,7 @@
 package com.project.FoodHub.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.FoodHub.enumeration.Categoria;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

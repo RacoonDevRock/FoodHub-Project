@@ -4,17 +4,18 @@ import com.project.FoodHub.dto.ConfirmacionResponse;
 import com.project.FoodHub.dto.RecetasCategoriaResponse;
 import com.project.FoodHub.dto.RecetaRequest;
 import com.project.FoodHub.entity.*;
+import com.project.FoodHub.enumeration.Categoria;
 
 import java.util.List;
 
 public interface IRecetaService {
 
-    public ConfirmacionResponse crearReceta(RecetaRequest recetaRequest);
+    ConfirmacionResponse crearReceta(RecetaRequest recetaRequest);
 
-    public void agregarIngrediente(Receta receta, Ingrediente ingrediente);
+    void agregarIngrediente(Receta receta, Ingrediente ingrediente);
 
-    public List<RecetasCategoriaResponse> mostrarRecetasPorCategoria(Categoria categoria);
+    List<RecetasCategoriaResponse> mostrarRecetasPorCategoria(Categoria categoria);
 
-    public Receta verReceta(Long idReceta);
+    Receta verReceta(Long idReceta);
 
 }

@@ -1,24 +1,21 @@
 package com.project.FoodHub.service;
 
-import com.project.FoodHub.dto.AuthRequest;
-import com.project.FoodHub.dto.AuthResponse;
 import com.project.FoodHub.dto.CreadorDTO;
 import com.project.FoodHub.entity.Creador;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ICreadorService {
 
-    public List<Creador> mostrarCreadores();
+    List<Creador> mostrarCreadores();
 
-    public Optional<String> crearCuenta(Creador creador);
+    Integer obtenerCantidadDeRecetasCreadas();
 
-    public AuthResponse iniciarSesion(AuthRequest authRequest);
+    CreadorDTO verPerfil();
 
-    public Integer obtenerCantidadDeRecetasCreadas();
+    Creador obtenerCreadorPorEmail(String email);
 
-    public CreadorDTO verPerfil();
+    Creador obtenerCreadorPorIdentificador(String identificador);
 
-    public int enableUser(String email);
+    Creador guardarCreador(Creador creador);
 }

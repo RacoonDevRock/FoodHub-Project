@@ -1,4 +1,4 @@
-package com.project.FoodHub.entity;
+package com.project.FoodHub.enumeration;
 
 import com.project.FoodHub.exception.CategoriaNoValidaException;
 

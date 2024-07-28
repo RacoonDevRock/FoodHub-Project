@@ -1,6 +1,6 @@
 package com.project.FoodHub.repository;
 
-import com.project.FoodHub.entity.Categoria;
+import com.project.FoodHub.enumeration.Categoria;
 import com.project.FoodHub.entity.Creador;
 import com.project.FoodHub.entity.Receta;
 import org.springframework.data.jpa.repository.JpaRepository;

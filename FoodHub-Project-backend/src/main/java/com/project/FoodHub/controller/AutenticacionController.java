@@ -1,11 +1,8 @@
 package com.project.FoodHub.controller;
 
-import com.project.FoodHub.dto.AuthRequest;
-import com.project.FoodHub.dto.AuthResponse;
-import com.project.FoodHub.dto.ConfirmacionResponse;
-import com.project.FoodHub.dto.CreadorRequest;
-import com.project.FoodHub.registration.RegistroService;
-import com.project.FoodHub.service.ICreadorService;
+import com.project.FoodHub.config.service.IUserDetailService;
+import com.project.FoodHub.dto.*;
+import com.project.FoodHub.exception.IncorrectCredentials;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +13,21 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AutenticacionController {
 
-    private final RegistroService registroService;
-    private final ICreadorService creadorService;
+    private final IUserDetailService userDetailService;
 
     @PostMapping("/registrar")
     public ResponseEntity<ConfirmacionResponse> register(@Valid @RequestBody CreadorRequest request){
-        return ResponseEntity.ok(registroService.registrar(request));
+        return ResponseEntity.ok(userDetailService.registrar(request));
     }
 
-    @GetMapping("/confirm")
-    public ResponseEntity<ConfirmacionResponse> confirm(@RequestParam("token") String token) {
-        return ResponseEntity.ok(registroService.confirmarToken(token));
+    @GetMapping("/confirmar")
+    public ResponseEntity<MessageResponse> confirmarCuenta(@RequestParam("token") String token) {
+        return ResponseEntity.ok(userDetailService.confirmAccount(token));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> iniciarSesion(@Valid @RequestBody AuthRequest authRequest) {
-        return ResponseEntity.ok(creadorService.iniciarSesion(authRequest));
+    public ResponseEntity<AuthResponse> iniciarSesion(@Valid @RequestBody AuthRequest authRequest) throws IncorrectCredentials {
+        return ResponseEntity.ok(userDetailService.iniciarSesion(authRequest));
     }
 
 }

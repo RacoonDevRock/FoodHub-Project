@@ -1,14 +1,11 @@
 package com.project.FoodHub.entity;
 
+import com.project.FoodHub.enumeration.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -16,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "creador")
-public class Creador implements UserDetails {
+public class Creador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +41,20 @@ public class Creador implements UserDetails {
     @OneToMany(mappedBy = "creador")
     private List<Receta> recetas;
 
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
+    @Column(name = "account_non_expired")
+    private boolean accountNonExpired;
+
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
+
+    @Column(name = "credentials_non_expired")
+    private boolean credentialsNonExpired;
+
     @Enumerated(EnumType.STRING)
     private Rol role;
-
-    @Column(name = "enabled")
-    private Boolean enabled = false;
 
     @Column(name = "foto_perfil", columnDefinition = "LONGTEXT")
     private String fotoPerfil;
@@ -65,40 +71,5 @@ public class Creador implements UserDetails {
         this.correoElectronico = email;
         this.contrasenia = contrasenia;
         this.codigoColegiatura = codigoColegiatura;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return contrasenia;
-    }
-
-    @Override
-    public String getUsername() {
-        return correoElectronico;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 }

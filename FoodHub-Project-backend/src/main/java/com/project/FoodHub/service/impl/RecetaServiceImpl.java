@@ -4,6 +4,7 @@ import com.project.FoodHub.dto.ConfirmacionResponse;
 import com.project.FoodHub.dto.RecetaRequest;
 import com.project.FoodHub.dto.RecetasCategoriaResponse;
 import com.project.FoodHub.entity.*;
+import com.project.FoodHub.enumeration.Categoria;
 import com.project.FoodHub.exception.CreadorNoEncontradoException;
 import com.project.FoodHub.exception.ListaRecetasNulaException;
 import com.project.FoodHub.exception.RecetaNoEncontradaException;

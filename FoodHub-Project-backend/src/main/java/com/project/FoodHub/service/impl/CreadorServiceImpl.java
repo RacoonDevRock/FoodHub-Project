@@ -1,41 +1,25 @@
 package com.project.FoodHub.service.impl;
 
-import com.project.FoodHub.config.Jwt.JwtService;
-import com.project.FoodHub.dto.AuthRequest;
-import com.project.FoodHub.dto.AuthResponse;
 import com.project.FoodHub.dto.CreadorDTO;
 import com.project.FoodHub.entity.Creador;
-import com.project.FoodHub.entity.Rol;
 import com.project.FoodHub.exception.*;
 import com.project.FoodHub.mapper.CreadorMapper;
-import com.project.FoodHub.registration.token.TokenConfirmacion;
-import com.project.FoodHub.registration.token.TokenConfirmacionService;
 import com.project.FoodHub.repository.CreadorRepository;
 import com.project.FoodHub.repository.RecetaRepository;
 import com.project.FoodHub.service.ICreadorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CreadorServiceImpl implements ICreadorService {
 
     private final CreadorRepository creadorRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenConfirmacionService tokenConfirmacionService;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final RecetaRepository recetaRepository;
     private final CreadorMapper creadorMapper;
 
@@ -43,64 +27,6 @@ public class CreadorServiceImpl implements ICreadorService {
     @Override
     public List<Creador> mostrarCreadores() {
         return creadorRepository.findAll();
-    }
-
-    @Override
-    public Optional<String> crearCuenta(Creador creador) {
-        if (creadorRepository.findCreadorByCorreoElectronico(creador.getCorreoElectronico()).isPresent()) {
-            throw new CorreoExistenteException("Correo ingresado ya existe");
-        }
-
-        creador.setContrasenia(passwordEncoder.encode(creador.getContrasenia()));
-        creador.setRole(Rol.USER);
-
-        creadorRepository.save(creador);
-
-        String token = UUID.randomUUID().toString();
-        TokenConfirmacion tokenConfirmacion = new TokenConfirmacion(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
-                creador
-        );
-
-        tokenConfirmacionService.saveConfirmationToken(tokenConfirmacion);
-
-        return Optional.of(token);
-    }
-
-    @Override
-    public AuthResponse iniciarSesion(AuthRequest authRequest) {
-        String identificador = authRequest.getIdentificador();
-        String contrasenia = authRequest.getContrasenia();
-
-        Creador creador;
-
-        if (identificador.contains("@")) {
-            creador = creadorRepository.findCreadorByCorreoElectronico(identificador)
-                    .orElseThrow(() -> new UsuarioNoValidoException("Usuario no válido"));
-        } else {
-            creador = creadorRepository.findByCodigoColegiatura(identificador)
-                    .orElseThrow(() -> new UsuarioNoValidoException("Usuario no válido"));
-        }
-
-        if (!creador.getEnabled()) {
-            throw new CuentaNoConfirmadaException("Cuenta no confirmada");
-        }
-
-        if (passwordEncoder.matches(contrasenia, creador.getContrasenia())) {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(creador, contrasenia)
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            String jwtToken = jwtService.generateToken(creador.getIdCreador().toString(), new HashMap<>(), creador);
-
-            return AuthResponse.builder().token(jwtToken).build();
-        } else {
-            throw new UsuarioNoValidoException("Credenciales inválidas");
-        }
     }
 
     @Override
@@ -124,8 +50,21 @@ public class CreadorServiceImpl implements ICreadorService {
     }
 
     @Override
-    public int enableUser(String email) {
-        return creadorRepository.enableUser(email);
+    public Creador obtenerCreadorPorEmail(String email) {
+        return creadorRepository.findCreadorByCorreoElectronico(email)
+                .orElseThrow(() -> new CreadorNoEncontradoException("Usuario con email: " + email + " no encontrado"));
+    }
+
+    @Override
+    public Creador obtenerCreadorPorIdentificador(String identificador) {
+        return creadorRepository.findByCodigoColegiatura(identificador)
+                .orElseThrow(() -> new CreadorNoEncontradoException("Usuario con identificador: " + identificador + " no encontrado"));
+    }
+
+    @Override
+    public Creador guardarCreador(Creador creador) {
+        creadorRepository.save(creador);
+        return creador;
     }
 
     private Long obtenerIdCreadorAutenticado() {
