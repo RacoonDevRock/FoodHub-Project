@@ -1,33 +1,31 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {environments} from "../../environments/environments";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {RecetaCategoriaDTO} from "../models/RecetaCategoriaDTO";
-import {RecetaDTO} from "../models/RecetaDTO";
+import { environment } from '../../environments/environment.development';
+import { RecetaDTO } from '../interfaces/RecetaDTO';
+import { Observable } from 'rxjs';
+import { RecetaCategoriaDTO } from '../interfaces/RecetaCategoriaDTO';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RecetaService {
-  public url = environments.baseUrl;
+  public baseUrl: string = `${environment.apiUrl}/explorar`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  crearReceta(recetaDTO: RecetaDTO): Observable<any>{
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': `application/json`,
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.post<any>(`${this.url}/explorar/crear`, recetaDTO, { headers });
+  crearReceta(recetaDTO: RecetaDTO): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/crear`, recetaDTO);
   }
 
-  mostrarRecetasPorCategoria(categoria: string): Observable<RecetaCategoriaDTO[]>{
-    return this.http.get<RecetaCategoriaDTO[]>(`${this.url}/explorar/recetas?categoria=${categoria}`);
+  mostrarRecetasPorCategoria(
+    categoria: string
+  ): Observable<RecetaCategoriaDTO[]> {
+    return this.http.get<RecetaCategoriaDTO[]>(
+      `${this.baseUrl}/recetas?categoria=${categoria}`
+    );
   }
 
   verReceta(idReceta: number): Observable<RecetaDTO> {
-    return this.http.get<RecetaDTO>(`${this.url}/explorar/${idReceta}`);
+    return this.http.get<RecetaDTO>(`${this.baseUrl}/${idReceta}`);
   }
 }

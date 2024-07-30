@@ -1,32 +1,21 @@
 import { Injectable } from '@angular/core';
-import {environments} from "../../environments/environments";
-import {HttpClient, HttpHeaders } from "@angular/common/http";
-import {Observable} from "rxjs";
+import { environment } from '../../environments/environment.development';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CreadorService {
-  url:string = environments.baseUrl;
+  public baseUrl: string = `${environment.apiUrl}/creador`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  obtenerCantidadRecetasCreadas(){
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<any>(`${this.url}/creador/cantidadRecetas`, { headers });
+  obtenerCantidadRecetasCreadas(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/cantidadRecetas`);
   }
 
   verPerfil(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<any>(`${this.url}/creador/perfil`, { headers });
+    return this.http.get<any>(`${this.baseUrl}/perfil`);
   }
-
 }

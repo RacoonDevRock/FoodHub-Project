@@ -1,36 +1,38 @@
-import {Component, OnInit} from '@angular/core';
-import {RecetaService} from "../../services/receta.service";
-import {RecetaDTO} from "../../models/RecetaDTO";
-import {ActivatedRoute} from "@angular/router";
-import {SharedService} from "../../services/shared.service";
-import {CreadorDTO} from "../../models/CreadorDTO";
+import { Component, OnInit } from '@angular/core';
+import { RecetaDTO } from '../../interfaces/RecetaDTO';
+import { RecetaService } from '../../services/receta.service';
+import { ActivatedRoute } from '@angular/router';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-card-body',
+  standalone: true,
+  imports: [],
   templateUrl: './card-body.component.html',
-  styleUrls: ['./card-body.component.css']
+  styleUrl: './card-body.component.css',
 })
-export class CardBodyComponent implements OnInit {
-  recetaDTO: RecetaDTO | undefined;
+export default class CardBodyComponent implements OnInit {
+  public recetaDTO!: RecetaDTO;
 
-  constructor(private recetaService: RecetaService, private route: ActivatedRoute, private sharedService:SharedService) {
-  }
+  constructor(
+    private recetaService: RecetaService,
+    private route: ActivatedRoute,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const idReceta = this.sharedService.getrecetaAlmacenada();
-      this.recetaService.verReceta(idReceta).subscribe((receta: RecetaDTO) => {
-          this.recetaDTO = receta;
-        },
-        (error) =>{
-          console.error('Error al obtener la receta:', error);
-        }
-      );
-    });
+    const idReceta = this.sharedService.getrecetaAlmacenada();
+    this.recetaService.verReceta(idReceta).subscribe(
+      (receta) => {
+        this.recetaDTO = receta;
+      },
+      (error) => {
+        console.error(`${error.name}: ${error.message}`);
+      }
+    );
   }
 
   goBack() {
     window.history.back();
   }
-
 }

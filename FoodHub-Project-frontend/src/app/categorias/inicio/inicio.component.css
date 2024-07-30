@@ -4,7 +4,7 @@ main {
 
 .container {
   display: flex;
-  min-height:820px;
+  min-height: 820px;
 }
 
 .column-left {
@@ -22,6 +22,3 @@ main {
 .column-right h2 {
   font-size: large;
 }
-
-
-
